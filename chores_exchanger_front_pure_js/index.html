@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chores Exchanger</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+        }
+        #initial-buttons {
+            justify-content: center;
+            text-align: center;
+            align-items: center;
+        }
+        .container {
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .main-content, .given-chores-content, .taken-chores-content, .completed-chores-content {
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            width: 100%;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="initial-buttons">
+            <button onclick="showRegistrationForm()">Регистрация</button>
+            <button onclick="showLoginForm()">Вход</button>
+        </div>
+
+        <div id="registration" class="hidden">
+            <button id="reg-back" onclick="showInitialButtons()">Назад</button>
+            <h1>Регистрация</h1>
+            <form id="register-form">
+                <input type="text" id="reg-login" placeholder="Логин" required><br><br>
+                <input type="password" id="reg-password" placeholder="Пароль" required><br><br>
+                <input type="text" id="reg-name" placeholder="Имя" required><br><br>
+                <input type="text" id="reg-surname" placeholder="Фамилия" required><br><br>
+                <input type="text" id="reg-apartment" placeholder="Квартира" required><br><br>
+                <button type="submit">Зарегистрировать</button>
+            </form>
+        </div>
+
+        <div id="login" class="hidden">
+            <button id="login-back" onclick="showInitialButtons()">Назад</button>
+            <h1>Вход</h1>
+            <form id="login-form">
+                <input type="text" id="login-login" placeholder="Логин" required><br><br>
+                <input type="password" id="login-password" placeholder="Пароль" required><br><br>
+                <button type="submit">Войти</button>
+            </form>
+        </div>
+
+        <div id="main-page" class="hidden">
+            <div class="header">
+                <div id="main-buttons">
+                    <button id="main-add-chore" onclick="showAddChorePage()">Добавить услугу</button>
+                    <button id="main-given-chores" onclick="showGivenChores()">Выданные услуги</button>
+                    <button id="main-taken-chores" onclick="showTakenChores()">Принятые услуги</button>
+                    <button id="main-completed-chores" onclick="showCompletedChores()">Выполненные услуги</button>
+                </div>
+                <div id="main-account">
+                    <div id="main-account-info">Имя Фамилия</div>
+                    <button id="main-account-button" onclick="showAccountPage()">Личный кабинет</button>
+                </div>
+            </div>
+            <div class="main-content">
+                <h2>Список услуг</h2>
+                <div id="main-chores-list">
+
+                </div>
+            </div>
+        </div>
+
+        <div id="account" class="hidden">
+            <button id="account-back" onclick="showMainPage()">Назад</button>
+            <table id="account-details">
+                <tr>
+                    <td>Логин: </td>
+                    <td id="account-details-login"></td>
+                </tr>
+                <tr>
+                    <td>Пароль: </td>
+                    <td id="account-details-password"></td>
+                </tr>
+                <tr>
+                    <td>Имя: </td>
+                    <td id="account-details-name"></td>
+                </tr>
+                <tr>
+                    <td>Фамилия: </td>
+                    <td id="account-details-surname"></td>
+                </tr>
+                <tr>
+                    <td>Квартира: </td>
+                    <td id="account-details-apartment"></td>
+                </tr>
+            </table>
+            <button id="account-exit" onclick="logOut()">Выйти из аккаунта</button>
+            <button id="account-delete" onclick="deleteAccount()">Удалить аккаунт</button>
+            <dialog id="account_delete_dialog"></dialog>
+        </div>
+
+        <div id="add-chore-page" class="hidden">
+            <button id="add-chore-page-back" onclick="showMainPage()">Назад</button>
+            <h1>Добавление новой услуги</h1>
+            <form id="add-chore-form">
+                <input type="text" id="add-chore-name" placeholder="Название" required><br><br>
+                <textarea type="text" id="add-chore-info" placeholder="Содержание(максимум 5000 символов)" required maxlength="5000"></textarea><br><br>
+                <button type="submit">Опубликовать</button>
+            </form>
+        </div>
+
+        <div id="given-chores" class="hidden">
+            <button id="given-chores-back" onclick="showMainPage()">Назад</button>
+            <div id="given-chores-content">
+                <h2>Выданные услуги</h2>
+                <h3>Принятые услуги</h3>
+                <div id="given-chores-list-taken">
+
+                </div>
+                <h3>Непринятые услуги</h3>
+                <div id="given-chores-list-not-taken">
+
+                </div>
+            </div>
+        </div>
+
+        <div id="taken-chores" class="hidden">
+            <button id="taken-chores-back" onclick="showMainPage()">Назад</button>
+            <div id="taken-chores-content">
+                <h2>Принятые услуги</h2>
+                <div id="taken-chores-list">
+
+                </div>
+            </div>
+        </div>
+
+        <div id="completed-chores" class="hidden">
+            <button id="completed-chores-back" onclick="showMainPage()">Назад</button>
+            <div id="completed-chores-content">
+                <h2>Выполненные услуги</h2>
+                <div id="completed-chores-list">
+
+                </div>
+            </div>
+        </div>
+
+        <dialog id="chore_info_dialog"></dialog>
+    </div>
+
+    <script>
+        let login = null;
+        let password = null;
+
+        function showRegistrationForm() {
+            document.getElementById('initial-buttons').classList.add('hidden');
+            document.getElementById('registration').classList.remove('hidden');
+        }
+
+        function showLoginForm() {
+            document.getElementById('initial-buttons').classList.add('hidden');
+            document.getElementById('login').classList.remove('hidden');
+        }
+
+        function showMainPage() {
+            clearChoreLists();
+            clearAddChoreForm();
+            document.getElementById('initial-buttons').classList.add('hidden');
+            document.getElementById('account').classList.add('hidden');
+            document.getElementById('login').classList.add('hidden');
+            document.getElementById('add-chore-page').classList.add('hidden');
+            document.getElementById('given-chores').classList.add('hidden');
+            document.getElementById('taken-chores').classList.add('hidden');
+            document.getElementById('completed-chores').classList.add('hidden');
+            document.getElementById('main-page').classList.remove('hidden');
+            fetchChores("getMainPageChores", "main-chores-list");
+        }
+
+        function showInitialButtons() {
+            clearLoginForm();
+            clearRegisterForm();
+            document.getElementById('registration').classList.add('hidden');
+            document.getElementById('login').classList.add('hidden');
+            document.getElementById('main-page').classList.add('hidden');
+            document.getElementById('account').classList.add('hidden');
+            document.getElementById('initial-buttons').classList.remove('hidden');
+        }
+
+        function showAccountPage() {
+            fetch(`http://localhost:8080/getAccountDetails/${login}/${password}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Ошибка получения информации об аккаунте');
+                }
+            })
+            .then(data => {
+                clearChoreLists();
+                document.getElementById('main-page').classList.add('hidden');
+                document.getElementById('account').classList.remove('hidden');
+                document.getElementById('account-details-login').innerHTML = data.login;
+                document.getElementById('account-details-password').innerHTML = data.password;
+                document.getElementById('account-details-name').innerHTML = data.firstName;
+                document.getElementById('account-details-surname').innerHTML = data.lastName;
+                document.getElementById('account-details-apartment').innerHTML = data.apartment;
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                showMainPage();
+                alert(error);
+            });
+        }
+        
+        async function showGivenChores() {
+            clearChoreLists();
+            document.getElementById('main-page').classList.add('hidden');
+            document.getElementById('given-chores').classList.remove('hidden');
+            await fetchChores("getGivenPageChoresTaken", "given-chores-list-taken");
+            await fetchChores("getGivenPageChoresNotTaken", "given-chores-list-not-taken");
+        }
+        
+        function showTakenChores() {
+            clearChoreLists();
+            document.getElementById('main-page').classList.add('hidden');
+            document.getElementById('taken-chores').classList.remove('hidden');
+            fetchChores("getTakenPageChores", "taken-chores-list");
+        }
+        
+        function showCompletedChores() {
+            clearChoreLists();
+            document.getElementById('main-page').classList.add('hidden');
+            document.getElementById('completed-chores').classList.remove('hidden');
+            fetchChores("getCompletedPageChores", "completed-chores-list");
+        }
+        
+        function showAddChorePage() {
+            clearChoreLists();
+            document.getElementById('main-page').classList.add('hidden');
+            document.getElementById('add-chore-page').classList.remove('hidden');
+        }
+        
+        function clearLoginForm() {
+            document.getElementById("login-form").reset();
+        }
+        
+        function clearRegisterForm() {
+            document.getElementById("register-form").reset();
+        }
+        
+        function clearAddChoreForm() {
+            document.getElementById("add-chore-form").reset();
+        }
+        
+        function clearAccountInfo() {
+            document.getElementById('account-details-login').innerHTML = '';
+            document.getElementById('account-details-password').innerHTML = '';
+            document.getElementById('account-details-name').innerHTML = '';
+            document.getElementById('account-details-surname').innerHTML = '';
+            document.getElementById('account-details-apartment').innerHTML = '';
+        }
+
+        function clearChoreLists() {
+            document.getElementById("main-chores-list").innerHTML = '';
+            document.getElementById("given-chores-list-taken").innerHTML = '';
+            document.getElementById("given-chores-list-not-taken").innerHTML = '';
+            document.getElementById("taken-chores-list").innerHTML = '';
+            document.getElementById("completed-chores-list").innerHTML = '';
+        }
+
+        function logOut() {
+            login = null;
+            password = null;
+            showInitialButtons();
+        }
+        
+        function closeDialog(dialog) {
+            dialog.close();
+        }
+
+        function deleteAccount() {
+            let dialog = document.getElementById("account_delete_dialog");
+            dialog.innerHTML = '<h1>Вы уверены, что хотите удалить аккаунт?</h1>' +
+            `<button onclick="deleteAccountLogic(); closeDialog(${dialog.id});">Да</button>` + 
+            `<button onclick="closeDialog(${dialog.id})">Нет</button>`;
+            dialog.showModal();
+        }
+
+        function deleteAccountLogic() {
+            const formData = {
+                login: login,
+                password: password
+            };
+            fetch('http://localhost:8080/deleteAccount', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                if (response.ok) {
+                    return;
+                } else {
+                    throw new Error('Ошибка удаления аккаунта');
+                }
+            })
+            .then(() => {
+                document.getElementById("main-account-info").innerHTML = "";
+                clearAccountInfo();
+                login = null;
+                password = null;
+                showInitialButtons();
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert(error);
+            });
+        }
+        
+        async function takeChore(login, choreId) {
+            const formData = {
+                userLogin: login,
+                choreId: choreId
+            };
+            await fetch('http://localhost:8080/takeChore', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                if (response.ok) {
+                    return;
+                } else {
+                    throw new Error('Ошибка принятия услуги');
+                }
+            })
+            .then(() => {
+                alert("Услуга принята");
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert(error);
+            });
+        }
+
+        async function deleteChore(login, choreId) {
+            const formData = {
+                userLogin: login,
+                choreId: choreId
+            };
+            await fetch('http://localhost:8080/deleteChore', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                if (response.ok) {
+                    return;
+                } else {
+                    throw new Error('Ошибка удаления услуги');
+                }
+            })
+            .then(() => {
+                alert("Услуга удалена");
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert(error);
+            });
+        }
+
+        async function refuseChore(login, choreId) {
+            const formData = {
+                userLogin: login,
+                choreId: choreId
+            };
+            await fetch('http://localhost:8080/refuseChore', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                if (response.ok) {
+                    return;
+                } else {
+                    throw new Error('Ошибка отказа от услуги');
+                }
+            })
+            .then(() => {
+                alert("Отказ от услуги принят");
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert(error);
+            });
+        }
+
+        async function completeChore(login, choreId) {
+            const formData = {
+                userLogin: login,
+                choreId: choreId
+            };
+            await fetch('http://localhost:8080/completeChore', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                if (response.ok) {
+                    return;
+                } else {
+                    throw new Error('Ошибка завершения услуги');
+                }
+            })
+            .then(() => {
+                alert("Услуга завершена");
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert(error);
+            });
+        }
+
+        async function takeChoreListRequest(login, choreId, dialog, endpoint, listId) {
+            await takeChore(login, choreId);
+            closeDialog(dialog);
+            await fetchChores(endpoint, listId);
+        }
+
+        async function deleteChoreListRequest(login, choreId, dialog, endpoint, listId) {
+            await deleteChore(login, choreId);
+            closeDialog(dialog);
+            await fetchChores(endpoint, listId);
+        }
+
+        async function refuseChoreListRequest(login, choreId, dialog, endpoint, listId) {
+            await refuseChore(login, choreId);
+            closeDialog(dialog);
+            await fetchChores(endpoint, listId);
+        }
+
+        async function completeChoreListRequest(login, choreId, dialog, endpoint, listId) {
+            await completeChore(login, choreId);
+            closeDialog(dialog);
+            await fetchChores(endpoint, listId);
+        }
+
+        document.getElementById('register-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = {
+                firstName: document.getElementById('reg-name').value,
+                lastName: document.getElementById('reg-surname').value,
+                login: document.getElementById('reg-login').value,
+                password: document.getElementById('reg-password').value,
+                apartment: document.getElementById('reg-apartment').value
+            };
+            
+            fetch('http://localhost:8080/addUser', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Регистрация успешна!');
+                    showInitialButtons();
+                } else {
+                    throw new Error('Ошибка регистрации');
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Ошибка при регистрации');
+            });
+        });
+        
+        document.getElementById('login-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = {
+                login: document.getElementById('login-login').value,
+                password: document.getElementById('login-password').value
+            };
+
+            fetch('http://localhost:8080/signIn', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Ошибка входа');
+                }
+            })
+            .then(data => {
+                login = data.login;
+                password = data.password;
+                showMainPage();
+                document.getElementById("main-account-info").innerHTML = data.firstName + " " + data.lastName;
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Неверный логин или пароль');
+            });
+        });
+        
+        document.getElementById('add-chore-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = {
+                userLogin: login,
+                userPassword: password,
+                name: document.getElementById('add-chore-name').value,
+                info: document.getElementById('add-chore-info').value
+            };
+            
+            fetch('http://localhost:8080/addChore', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Ошибка добавления новой услуги');
+                }
+            })
+            .then(data => {
+                showMainPage();
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Ошибка добавления новой услуги');
+            });
+        });
+
+        async function fetchChores(endpoint, listId) {
+            await fetch(`http://localhost:8080/${endpoint}/${login}/${password}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Ошибка получения списка услуг');
+                }
+            })
+            .then(data => {
+                const list = document.getElementById(listId);
+                document.getElementById(listId).innerHTML = '';
+                data.list.forEach(chore => {
+                    const div = document.createElement('div');
+                    div.innerHTML = `
+                        <span>${chore.name}</span>
+                        <button class="chore-info-button" onclick="showChoreInfo('${endpoint}', '${listId}', '${chore.id}', '${chore.status}')">Info</button>
+                    `;
+                    list.appendChild(div);
+                });
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Ошибка при загрузке списка услуг');
+            });
+        }
+
+        function showChoreInfo(endpoint, listId, choreId, choreStatus) {
+            const formData = {
+                id: choreId
+            };
+            fetch(`http://localhost:8080/chore/${choreId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Ошибка получения информации об услуге');
+                }
+            })
+            .then(data => {
+                let dialog = document.getElementById("chore_info_dialog");
+                dialog.innerHTML = `<div><h2>Услуга ${data.name}:</h2>` +
+                `<div>${data.info}</div>` +
+                `<h2>Статус: ${data.statusInfo}</h2></div>` +
+                `<div><h2>Заказчик: ${data.userLastName} ${data.userFirstName}, Квартира: ${data.userApartment}</h2>` +
+                `<button onclick="closeDialog(${dialog.id})">Назад</button>`;
+                if (choreStatus == "CREATED") {
+                    if (data.userLogin != login){
+                        dialog.innerHTML += `<button onclick="takeChoreListRequest('${login}', '${choreId}', ${dialog.id}, '${endpoint}', '${listId}')">Принять</button>`;
+                    }
+                    else {
+                        dialog.innerHTML += `<button onclick="deleteChoreListRequest('${login}', '${choreId}', ${dialog.id}, '${endpoint}', '${listId}')">Удалить</button>`;
+                    }
+                    
+                }
+                else if (choreStatus == "TAKEN") {
+                    if (data.userLogin != login){
+                        dialog.innerHTML += `<button onclick="refuseChoreListRequest('${login}', '${choreId}', ${dialog.id}, '${endpoint}', '${listId}')">Отказаться</button>`;
+                    }
+                    else {
+                        dialog.innerHTML += `<button onclick="completeChoreListRequest('${login}', '${choreId}', ${dialog.id}, '${endpoint}', '${listId}')">Отметить выполненной</button>`;
+                    }
+                }
+                dialog.showModal();
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Ошибка при загрузке информации об услуге');
+            });
+        }
+    </script>
+</body>
+</html>
