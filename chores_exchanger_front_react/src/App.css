@@ -1,0 +1,274 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background-color: whitesmoke;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+}
+
+.container {
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+#registration, #login {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 80vh;
+}
+
+.chore-info-dialog {
+  font-size: 18px;
+  width: 100%;
+}
+
+.chore-info-dialog button {
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.chore-info-dialog p {
+  gap: 10px;
+}
+
+#register-form, #login-form {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center; 
+}
+
+#secondary-button,
+#account-exit,
+#account-delete {
+  padding: 10px;
+  cursor: pointer;
+  border: 2 solid grey;
+  background-color: lightskyblue;
+  color: black;
+  border-radius: 5px;
+  font-size: 18px;
+  text-align: center;
+}
+
+#account-exit {
+  background-color: darkblue;
+  color: white;
+} 
+
+#account-delete {
+  background-color: red;
+  color: white;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; 
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+#main-buttons {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  gap: 20px;
+}
+
+#initial-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  gap: 20px;
+  height: 80vh;
+}
+
+#main-buttons button,
+#initial-buttons button,
+#main-account button {
+  padding: 10px;
+  cursor: pointer;
+  border: 2 solid grey;
+  background-color: #4CAF50;
+  color: white;
+  border-radius: 5px;
+  font-size: 20px;
+  text-align: center;
+}
+
+#main-buttons button:hover,
+#initial-buttons button:hover {
+  background-color: #45a049;
+}
+
+#main-account {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  width: auto;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+#main-account-info {
+  margin-bottom: 10px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+#account {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 80vh;
+}
+
+#account #secondary-button {
+  margin-right: auto;
+}
+
+#account-details {
+  width: 20%;
+  background-color: skyblue;
+  border: 1px solid grey;
+  border-radius: 5px;
+  font-size: 18px;
+  margin: 20px 0;
+}
+
+#account-details td {
+  padding: 10px;
+  border: 1px solid lightgray;
+  text-align: center;
+}
+
+#account-exit, #account-delete {
+  margin: 10px;
+}
+
+#add-chore-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center; 
+}
+
+#add-chore-form #secondary-button {
+  width:max-content;
+}
+
+input, #photo-input {
+  font-size: 18px;
+  padding: 10px;
+  border: 1px solid grey;
+  border-radius: 5px;
+  background-color: white;
+}
+
+#add-chore-form textarea {
+  height: 300px;
+  resize: vertical;
+}
+#photo-input,
+#add-chore-form input,
+#add-chore-form textarea {
+  margin-bottom: 10px;
+  font-size: 18px;
+  width: 80%;
+  padding: 10px;
+  border: 1px solid grey;
+  border-radius: 5px;
+}
+
+#given-chores-content,
+#given-chores-list-block-taken,
+#given-chores-list-block-not-taken {
+  display: flex;
+  flex-direction: column;
+}
+
+#given-chores-list-block-taken,
+#given-chores-list-block-not-taken {
+  width: 50%;
+}
+
+#given-chores-list-blocks {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+#main-chores-list,
+#given-chores-list-taken,
+#given-chores-list-not-taken,
+#taken-chores-list,
+#completed-chores-list {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 10px;
+  font-size: 18px;
+} 
+
+#main-chores-list div,
+#given-chores-list-taken div,
+#given-chores-list-not-taken div,
+#taken-chores-list div,
+#completed-chores-list div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; 
+  margin-bottom: 10px;
+  background-color: lightblue;
+  padding: 5px;
+  margin-left: 0px;
+  margin-right: 1%;
+  border: 1px solid grey;
+  border-radius: 5px;
+}
+
+#main-chores-list p,
+#given-chores-list-taken p,
+#given-chores-list-not-taken p,
+#taken-chores-list p,
+#completed-chores-list p {
+  text-align: center;
+} 
+
+#main-chores-list div span,
+#given-chores-list-taken div span,
+#given-chores-list-not-taken div span,
+#taken-chores-list div span,
+#completed-chores-list div span {
+  margin-left: 30px;
+} 
+
+#main-chores-list #secondary-button,
+#given-chores-list-taken #secondary-button,
+#given-chores-list-not-taken #secondary-button,
+#taken-chores-list #secondary-button,
+#completed-chores-list #secondary-button {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: flex-end;
+}
+
+.main-content h2,
+#given-chores h2,
+#given-chores h3,
+#taken-chores h2,
+#completed-chores h2,
+#add-chore-page h2 {
+  text-align: center;
+}
